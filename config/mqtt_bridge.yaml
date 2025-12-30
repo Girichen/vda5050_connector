@@ -1,0 +1,66 @@
+mqtt:
+  # TLS parameters.
+  #tls:
+   # ca_certs: /etc/ssl/certs/Root_CA.pem
+   # certfile: /etc/ssl/certs/Client.pem
+   # keyfile: /etc/ssl/private/Client.key
+   # tls_insecure: true
+  # Connection parameters.
+  connection:
+    #host: 192.168.1.111
+    #host: 192.168.33.211
+    #host: 47.110.75.164
+    host: 120.26.137.47
+    port: 1883
+    keepalive: 60
+  account:
+    username: ""
+    password: ""
+  # MQTT parameters.
+  client:
+    client_id: CJ0001
+    clean_session: false
+serializer: json:dumps
+deserializer: json:loads
+bridge:
+  # Bridge from ROS to MQTT.
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: vda5050_msgs.msg:State
+    topic_from: /state
+    topic_to: profcontrol/v2/CJ/CJ0001/state
+
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: vda5050_msgs.msg:Visualization
+    topic_from: /visualization
+    topic_to: profcontrol/v2/CJ/CJ0001/visualization
+
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: vda5050_msgs.msg:Connection
+    topic_from: /connection
+    topic_to: profcontrol/v2/CJ/CJ0001/connection
+
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: vda5050_msgs.msg:Factsheet
+    topic_from: /factsheet
+    topic_to: profcontrol/v2/CJ/CJ0001/factsheet
+
+  # Bridge from MQTT to ROS.
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: vda5050_msgs.msg:InstantAction
+    topic_from: profcontrol/v2/CJ/CJ0001/instantAction
+    topic_to: /ia_from_mc
+
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: vda5050_msgs.msg:Order
+    topic_from: profcontrol/v2/CJ/CJ0001/order
+    topic_to: /order_from_mc
+
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: vda5050_msgs.msg:MapUpdate
+    topic_from: profcontrol/v2/CJ/CJ0001/map
+    topic_to: /map
+
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: vda5050_msgs.msg:ZoneUpdate
+    topic_from: profcontrol/v2/CJ/CJ0001/zones
+    topic_to: /zones

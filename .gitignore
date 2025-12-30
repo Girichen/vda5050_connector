@@ -1,0 +1,10 @@
+# ignore compiled documentation (output of Doxygen)
+doc/html/
+doc/latex/
+build/
+.vscode/
+.catkin_tools/
+.devcontainer/
+.idea/
+.cmake-build-debug/
+devel/
