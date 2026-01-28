@@ -366,6 +366,8 @@ class VDA5050Connector : public VDA5050Node {
    * @param msg  Incoming message.
    */
   void InteractionZoneCallback(const vda5050_msgs::InteractionZoneStates::ConstPtr& msg);
+
+  void ActionStateCallback(const vda5050_msgs::ActionState::ConstPtr& msg);
 };
 
 #endif

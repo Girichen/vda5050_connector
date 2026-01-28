@@ -145,6 +145,9 @@ void VDA5050Connector::LinkSubscriptionTopics(ros::NodeHandle* nh) {
     else if (CheckParamIncludes(elem.first, "interaction_zones"))
       this->subscribers.push_back(std::make_shared<ros::Subscriber>(
           nh->subscribe(elem.second, 100, &VDA5050Connector::InteractionZoneCallback, this)));
+    else if (CheckParamIncludes(elem.first, "action_state"))
+      this->subscribers.push_back(std::make_shared<ros::Subscriber>(
+          nh->subscribe(elem.second, 100, &VDA5050Connector::ActionStateCallback, this)));
   }
 }
 
@@ -409,6 +412,22 @@ void VDA5050Connector::SafetyStateCallback(const vda5050_msgs::SafetyState::Cons
 void VDA5050Connector::InteractionZoneCallback(
     const vda5050_msgs::InteractionZoneStates::ConstPtr& msg) {
   state.SetInteractionZones(*msg.get());
+}
+
+void VDA5050Connector::ActionStateCallback(const vda5050_msgs::ActionState::ConstPtr& msg){
+  ROS_INFO_STREAM("(vda5050_connector)receive a action state msg");
+  if (!msg || msg->actionId.empty() || msg->actionStatus.empty() || msg->actionType.empty()) {
+        ROS_INFO_STREAM("(vda5050_connector) Error: Received null ActionState message.");
+        return;
+  }
+  if(state.SetActionState(msg->actionId, msg->actionType, msg->actionStatus)){
+    ROS_INFO_STREAM("(vda5050_connector) Action State Updated >> ID: " << msg->actionId 
+                      << " | Type: " << msg->actionType 
+                      << " | New Status: " << msg->actionStatus);
+  } else {
+    ROS_ERROR_STREAM("(vda5050_connector) Failed to set ActionState! ID: " << msg->actionId 
+                    << " not found in current state or update rejected.");
+  }
 }
 
 void VDA5050Connector::PublishState() {

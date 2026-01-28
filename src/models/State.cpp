@@ -131,17 +131,17 @@ void State::AcceptNewOrder(const Order& new_order) {
 
   // state.nodeStates.clear();
   // state.edgeStates.clear();
-  // state.actionStates.clear();
+  state.actionStates.clear();
 
-  // const auto& new_nodes = new_order.GetNodes();
+  const auto& new_nodes = new_order.GetNodes();
   // const auto& new_edges = new_order.GetEdges();
 
-  // for (size_t i = 0; i < new_nodes.size(); i++) {
+  for (size_t i = 0; i < new_nodes.size(); i++) {
   //   state.nodeStates.push_back(NodeToNodeState(new_nodes[i]));
 
-  //   for (const auto& action : new_nodes[i].actions) {
-  //     state.actionStates.push_back(ActionToActionState(action));
-  //   }
+    for (const auto& action : new_nodes[i].actions) {
+      state.actionStates.push_back(ActionToActionState(action));
+    }
 
   //   if (i < new_edges.size()) {
   //     state.edgeStates.push_back(EdgeToEdgeState(new_edges[i]));
@@ -149,7 +149,7 @@ void State::AcceptNewOrder(const Order& new_order) {
   //       state.actionStates.push_back(ActionToActionState(action));
   //     }
   //   }
-  // }
+  }
 }
 
   //3 7 8 of figure 8

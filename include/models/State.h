@@ -207,6 +207,18 @@ class State {
     return false;
   }
 
+  inline bool SetActionState(const std::string& actionId,const std::string& actionType,const std::string& actionStatus){
+    for (auto& actionState : state.actionStates) {
+      std::cout << actionState.actionId <<actionState.actionType<<std::endl;
+        if (actionState.actionId == actionId && actionState.actionType == actionType) {
+            actionState.actionStatus = actionStatus;
+            return true; 
+        }
+    }
+
+    // 遍历完了都没找到匹配的
+    return false;
+  }
   /**
    * @brief Set the battery voltage.
    *
@@ -435,6 +447,8 @@ class State {
    * @return vda5050_msgs::ActionState
    */
   vda5050_msgs::ActionState ActionToActionState(const vda5050_msgs::Action& a);
+
+  
 };
 
 #endif
